@@ -6,7 +6,7 @@
     <title>Student Exam Login</title>
     <style>
         body {
-            background-image: url('your-background-image.jpg'); /* Replace with your background image URL */
+            background-image: url('https://freedesignfile.com/upload/2016/12/Beautiful-floral-background-Stock-Photo.jpg'); /* Replace with your background image URL */
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
