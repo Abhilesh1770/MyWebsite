@@ -1,48 +1,7 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Exam Login</title>
-    <style>
-        body {
-            background-image: url('https://freedesignfile.com/upload/2016/12/Beautiful-floral-background-Stock-Photo.jpg'); /* Replace with your background image URL */
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            text-align: center;
-            padding-top: 100px;
-        }
-
-        .login-box {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            padding: 20px;
-            width: 300px;
-            margin: 0 auto;
-        }
-
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <!-- ... (your existing head content) ... -->
 </head>
 <body>
     <div class="container">
@@ -73,30 +32,8 @@
             };
 
             if (validCredentials[username] === password) {
-                // Redirect to the respective exam page based on the username
-                switch (username) {
-                    case "Nisha":
-                        window.location.href = "exam_nisha.html"; // Replace with Nisha's exam page URL
-                        break;
-                    case "Nijhat":
-                        window.location.href = "exam_nijhat.html"; // Replace with Nijhat's exam page URL
-                        break;
-                    case "Chandani":
-                        window.location.href = "exam_chandani.html"; // Replace with Chandani's exam page URL
-                        break;
-                    case "Nitesh":
-                        window.location.href = "exam_nitesh.html"; // Replace with Nitesh's exam page URL
-                        break;
-                    case "Shreejak":
-                        window.location.href = "exam_shreejak.html"; // Replace with Shreejak's exam page URL
-                        break;
-                    case "Kritika":
-                        window.location.href = "exam_kritika.html"; // Replace with Kritika's exam page URL
-                        break;
-                    case "Samin":
-                        window.location.href = "exam_samin.html"; // Replace with Samin's exam page URL
-                        break;
-                }
+                // Redirect to the exam page
+                window.location.href = "satexam.html";
             } else {
                 alert("Invalid username or password. Please try again.");
             }
