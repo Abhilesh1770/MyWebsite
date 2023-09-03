@@ -1,0 +1,106 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Login</title>
+    <style>
+        body {
+            background-image: url('your-background-image.jpg'); /* Replace with your background image URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .login-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <h2>Login to Take the Exam</h2>
+            <form action="#" id="login-form" onsubmit="checkCredentials(); return false;">
+                <input type="text" placeholder="Username" name="username" required><br>
+                <input type="password" placeholder="Password" name="password" required><br>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function checkCredentials() {
+            const username = document.forms["login-form"]["username"].value;
+            const password = document.forms["login-form"]["password"].value;
+
+            // Define the valid username/password combinations
+            const validCredentials = {
+                "Nisha": "dyn8001a",
+                "Nijhat": "dyn8002c",
+                "Chandani": "dyn8003e",
+                "Nitesh": "dyn8004g",
+                "Shreejak": "8005i",
+                "Kritika": "8006k",
+                "Samin": "dyn8005m"
+            };
+
+            if (validCredentials[username] === password) {
+                // Redirect to the respective exam page based on the username
+                switch (username) {
+                    case "Nisha":
+                        window.location.href = "exam_nisha.html"; // Replace with Nisha's exam page URL
+                        break;
+                    case "Nijhat":
+                        window.location.href = "exam_nijhat.html"; // Replace with Nijhat's exam page URL
+                        break;
+                    case "Chandani":
+                        window.location.href = "exam_chandani.html"; // Replace with Chandani's exam page URL
+                        break;
+                    case "Nitesh":
+                        window.location.href = "exam_nitesh.html"; // Replace with Nitesh's exam page URL
+                        break;
+                    case "Shreejak":
+                        window.location.href = "exam_shreejak.html"; // Replace with Shreejak's exam page URL
+                        break;
+                    case "Kritika":
+                        window.location.href = "exam_kritika.html"; // Replace with Kritika's exam page URL
+                        break;
+                    case "Samin":
+                        window.location.href = "exam_samin.html"; // Replace with Samin's exam page URL
+                        break;
+                }
+            } else {
+                alert("Invalid username or password. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
