@@ -35,13 +35,23 @@
         <div class="login-box">
             <h2>Login to Take the Exam</h2>
             <form action="#" id="login-form" onsubmit="checkCredentials(); return false;">
-                <input type="text" placeholder="Username" name="username" required>
-                <input type="password" placeholder="Password" name="password" required>
-                <label for="agree">
-                    <input type="checkbox" id="agree" name="agree" required>
-                    I agree to the <a href="#">Terms and Policy</a>
-                </label>
-                <input type="submit" value="Login">
+                <div class="input-row">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-row">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="input-row">
+                    <label for="agree">
+                        <input type="checkbox" id="agree" name="agree" required>
+                        I agree to the <a href="#">Terms and Policy</a>
+                    </label>
+                </div>
+                <div class="input-row">
+                    <input type="submit" value="Login">
+                </div>
             </form>
             <p class="copyright">&copy; All Rights Reserved For www.abhileshkarn.com.np</p>
         </div>
@@ -58,9 +68,9 @@
                 "Nijhat": "dyn8002c",
                 "Chandani": "dyn8003e",
                 "Nitesh": "dyn8004g",
-                "Shreejak": "dyn8005i",
-                "Kritika": "dyn8006k",
-                "Samin": "dyndyn8005m"
+                "Shreejak": "8005i",
+                "Kritika": "8006k",
+                "Samin": "dyn8005m"
             };
 
             if (validCredentials[username] === password) {
