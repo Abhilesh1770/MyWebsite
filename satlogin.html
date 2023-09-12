@@ -1,17 +1,33 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
-        /* ... (previous CSS styles) ... */
-
-        .copyright {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #555;
+        body {
+            background-image: url('flower.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        /* ... (other CSS styles) ... */
     </style>
 </head>
 <body>
@@ -42,14 +58,14 @@
                 "Nijhat": "dyn8002c",
                 "Chandani": "dyn8003e",
                 "Nitesh": "dyn8004g",
-                "Shreejak": "8005i",
-                "Kritika": "8006k",
-                "Samin": "dyn8005m"
+                "Shreejak": "dyn8005i",
+                "Kritika": "dyn8006k",
+                "Samin": "dyndyn8005m"
             };
 
             if (validCredentials[username] === password) {
                 // Redirect to the exam page
-                window.location.href = "https://docs.google.com/forms/d/1PFXgiad6CKiBubGCoRgFbo8RZBc97FCv9_d8p79gbKY/edit?pli=1";
+                window.location.href = "satexam.html";
             } else {
                 alert("Invalid username or password. Please try again.");
             }
