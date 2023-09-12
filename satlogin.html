@@ -5,63 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
-        body {
-            background-image: url('flower.jpg');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+        /* ... (previous CSS styles) ... */
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .login-box {
+        .copyright {
             margin-top: 20px;
-        }
-
-        h2 {
-            color: #333;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
+            font-size: 12px;
+            color: #555;
         }
     </style>
 </head>
@@ -72,8 +21,13 @@
             <form action="#" id="login-form" onsubmit="checkCredentials(); return false;">
                 <input type="text" placeholder="Username" name="username" required>
                 <input type="password" placeholder="Password" name="password" required>
+                <label for="agree">
+                    <input type="checkbox" id="agree" name="agree" required>
+                    I agree to the <a href="#">Terms and Policy</a>
+                </label>
                 <input type="submit" value="Login">
             </form>
+            <p class="copyright">&copy; All Rights Reserved For www.abhileshkarn.com.np</p>
         </div>
     </div>
 
@@ -95,7 +49,7 @@
 
             if (validCredentials[username] === password) {
                 // Redirect to the exam page
-                window.location.href = "satexam.html";
+                window.location.href = "https://docs.google.com/forms/d/1PFXgiad6CKiBubGCoRgFbo8RZBc97FCv9_d8p79gbKY/edit?pli=1";
             } else {
                 alert("Invalid username or password. Please try again.");
             }
