@@ -78,3 +78,74 @@
     align-content: flex-end;
     text-align: center;
   }
+.body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Background color for the body */
+}
+
+.ribbon {
+    background-color: #3498db; /* Ribbon background color */
+    width: 250px; /* Ribbon width */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow: hidden;
+    transform: translateX(-100%); /* Initially hidden */
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+.ribbon ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ribbon li {
+    padding: 15px;
+    text-align: center;
+    color: white; /* Text color */
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out; /* Smooth background color transition */
+}
+
+.ribbon li:hover {
+    background-color: #2980b9; /* Background color on hover */
+}
+
+.ribbon.active {
+    transform: translateX(0); /* Show the ribbon */
+}
+
+/* Add a ribbon title */
+.ribbon::before {
+    content: "Navigation";
+    display: block;
+    background-color: #2980b9; /* Title background color */
+    color: white; /* Title text color */
+    font-weight: bold;
+    padding: 15px;
+    text-align: center;
+}
+
+/* Style the ribbon header */
+.ribbon ul::before {
+    content: "";
+    display: block;
+    height: 2px;
+    background-color: #2980b9; /* Separator line color */
+    margin: 0 20px;
+}
+
+/* Add a ribbon footer */
+.ribbon ul::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background-color: #2980b9; /* Separator line color */
+    margin: 0 20px;
+}
+
