@@ -1,151 +1,63 @@
-.navbar {
-  overflow: hidden;
-  background-color: #333;
-  font-family: cursive;
-}
-
-/* Links inside the navbar */
-.navbar a {
-  float: left;
-  font-size: 16px;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-/* The dropdown container */
-.dropdown {
-  float: left;
-  overflow: hidden;
-}
-
-/* Dropdown button */
-.dropdown .dropbtn {
-  font-size: 16px;
-  border: none;
-  outline: none;
-  color: white;
-  padding: 14px 16px;
-  background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
-}
-
-/* Add a red background color to navbar links on hover */
-.navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: red;
-}
-
-/* Dropdown content (hidden by default) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-  float: none;
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-/* Add a grey background color to dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-  .first{
-    background-position: center;
-    background-color: seagreen;
-    align-content: center;
-    padding: 40px;
-    border: 40px;
-    font-size: 30px;
-    color: burlywood;
-    align-content: flex-end;
-    text-align: center;
-  }
-.body{
+/* Reset some default styles */
+body, ul, li {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4; /* Background color for the body */
+    list-style: none;
 }
 
-.ribbon {
-    background-color: #3498db; /* Ribbon background color */
-    width: 250px; /* Ribbon width */
+/* Apply a light green or blue theme */
+body {
+    background-color: #e0f2f1; /* Light Green */
+    font-family: Arial, sans-serif;
+}
+
+/* Vertical Navigation Bar */
+.vertical-nav {
+    background-color: #2196F3; /* Blue */
+    width: 200px;
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
-    overflow: hidden;
-    transform: translateX(-100%); /* Initially hidden */
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
 }
 
-.ribbon ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+.vertical-nav ul {
+    padding: 20px;
 }
 
-.ribbon li {
-    padding: 15px;
-    text-align: center;
-    color: white; /* Text color */
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out; /* Smooth background color transition */
+.vertical-nav ul li {
+    margin-bottom: 10px;
 }
 
-.ribbon li:hover {
-    background-color: #2980b9; /* Background color on hover */
-}
-
-.ribbon.active {
-    transform: translateX(0); /* Show the ribbon */
-}
-
-/* Add a ribbon title */
-.ribbon::before {
-    content: "Navigation";
+.vertical-nav ul li a {
+    color: white;
+    text-decoration: none;
     display: block;
-    background-color: #2980b9; /* Title background color */
-    color: white; /* Title text color */
-    font-weight: bold;
-    padding: 15px;
+}
+
+/* Horizontal Navigation Bar */
+.horizontal-nav {
+    background-color: #4CAF50; /* Green */
+    padding: 10px 0;
     text-align: center;
 }
 
-/* Style the ribbon header */
-.ribbon ul::before {
-    content: "";
-    display: block;
-    height: 2px;
-    background-color: #2980b9; /* Separator line color */
-    margin: 0 20px;
+.horizontal-nav ul {
+    list-style: none;
 }
 
-/* Add a ribbon footer */
-.ribbon ul::after {
-    content: "";
-    display: block;
-    height: 2px;
-    background-color: #2980b9; /* Separator line color */
-    margin: 0 20px;
+.horizontal-nav ul li {
+    display: inline;
+    margin-right: 20px;
 }
 
+.horizontal-nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Content Area */
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
