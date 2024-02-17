@@ -46,8 +46,8 @@
 </head>
 <body>
 <div class="container">
-    <h1>General Knowledge Quiz</h1>
-    <div id="timer">Time Left: <span id="time">10:00</span></div>
+    <h1>SAT Mock Test 01</h1>
+    <div id="timer">Time Left: <span id="time">60:00</span></div>
     <div id="question"></div>
     <div class="options" id="options"></div>
     <button id="nextBtn">Next Question</button>
@@ -59,16 +59,70 @@
     // Array of questions and answers
     const questions = [
         {
-            question: "What is the capital of France?",
-            options: ["Paris", "London", "Rome", "Berlin"],
-            answer: "Paris"
+            question: "In a circle with center O, the arc XY measures 105°. What is the degree measure of the angle XOY that corresponds to this arc?",
+            options: ["180", "210", "240", "270"],
+            answer: "210",
+            explanation: "The angle on circle by an arc XY is given as 105°. We can use the property of the circle which states that the angle at the center will be twice the angle on the circle by the same arc. So, the angle XOY will be twice of the angle on the circle. So, angle XOY will be: angle XOY = 2 * 105° = 210°. Thus, the angle is 210 degrees."
         },
-        // Add more questions similarly
+        {
+            question: "What percentage does 90 represent in relation to 360?",
+            options: ["25%", "50%", "75%", "225%"],
+            answer: "25%",
+            explanation: "To find the percentage value of 90 within 360, we can use the following formula: Percentage = (Part / Whole) * 100. Where: Part = 90, Whole = 360. So, the percentage is: Percentage = (90 / 360) * 100 = 25%. So, 90 is 25% of 360."
+        },
+        {
+            question: "In a right triangle, the side lengths are 3√3, 2√3, and √70 units. What is the area of the triangle in square units?",
+            options: ["9", "18", "27", "36"],
+            answer: "18",
+            explanation: "The area of a triangle is given as: Area = (1/2) * base * height. Here, the longest side is √70 so it is the hypotenuse. The remaining two sides will be the base and perpendicular (height). So, the area will be: Area = (1/2) * 3√3 * 2√3 = 9 square units. Thus, the area is 9."
+        },
+        {
+            question: "2.5b + 5r = 80. If the business is tending to 16 raisins on a specific day, what is the capacity for biscuits that it can manage on the same day?",
+            options: ["0", "16", "32", "64"],
+            answer: "0",
+            explanation: "The given equation is: 2.5b + 5r = 80. So, putting r = 16 in the above equation, we get: 2.5b + 5 * 16 = 80 => 2.5b = 80 - 80 = 0. So, b = 0. So, the capacity of biscuits will be 0."
+        },
+        {
+            question: "In a specific rectangular area, the length-to-width ratio is 45 : 15. If the width of the region grows by 8 units, how should the length be adjusted to uphold this ratio?",
+            options: ["It must decrease by 24.5 units.", "It must increase by 24.5 units.", "It must decrease by 24 units.", "It must increase by 24 units."],
+            answer: "It must increase by 24 units.",
+            explanation: "The ratio of length to width is 45 : 15. Let the length be 45 and width be 15. After increasing the width, new width will be: 15 + 8 = 23. Let the new length be l’, so to keep the ratio same the new length should be: (l’ / 23) = (45 / 15) => l’ = 3 * 23 = 69. So, new length should be 69, that is, it should increase by 24 units."
+        },
+        {
+            question: "The table displays three sets of values for x and their corresponding f(x) values for a linear function f. What equation accurately represents the definition of f(x)?<br><br>x   f(x)<br>0   65<br>1   73<br>2   81",
+            options: ["f(x) = 6x + 65", "f(x) = 8x + 65", "f(x) = 65x + 73", "f(x) = 73x + 81"],
+            answer: "f(x) = 8x + 65",
+            explanation: "The constant value of the function is 65. And, after every increase in the value of x the value of the function is increased by 8. So, the equation for the f(x) will be: f(x) = 8x + 65."
+        },
+        {
+            question: "7 added to 4 times a quantity y is equal to 62. Which equation represents this condition?",
+            options: ["7(4y) = 62", "7 – 4y = 62", "7 + 4y = 62", "4y – 7 = 62"],
+            answer: "7 + 4y = 62",
+            explanation: "The statement is 'Seven added to four times a quantity y is equal to 62.' The equation starts with 7, which represents the initial value. Then, 4y signifies four times the quantity y. When we add these two parts together, we get the total, which is equal to 62. So, the equation will be 7 + 4y = 62."
+        },
+        {
+            question: "What is the equation that defines line p in the xy-plane, given that it passes through the point (-4, 6) and has a slope of 6?",
+            options: ["y = 6x + 30", "y = 6x – 30", "y = 6 + 30x", "y = 6x – 30x"],
+            answer: "y = 6x + 30",
+            explanation: "The equation of a line when it passes through a point and given slope is: y – y1 = Slope(x – x1). So, inserting the values in the above expression as: y – 6 = 6(x – (-4)) => y – 6 = 6x + 24 => y = 6x + 30. So, the equation will be y = 6x + 30."
+        },
+        {
+            question: "For a cost of $57, how many pounds of avocados were bought at a rate of $19 per pound?",
+            options: ["100", "3", "57", "19"],
+            answer: "3",
+            explanation: "To find out how many pounds of avocados were purchased, given that they cost $57 at a rate of $19 per pound, we can set up an equation. Let x represent the number of pounds of avocados purchased. The cost of the avocados can be calculated by multiplying the number of pounds by the cost per pound. Given that the cost of the avocados is $57 and the cost per pound is $19, we can write the equation: 57 = 19x. Now, to find the value of x, we’ll solve for x: x = 57 / 19 = 3. So, the customer purchased 3 pounds of avocados."
+        },
+        {
+            question: "If (x / 15) = 20, what is the value of (15 / x)?",
+            options: ["6", "0.05", "0.5", "5"],
+            answer: "0.05",
+            explanation: "The given expression is (x / 15) = 20. To find the reciprocal of the given term, then just interchange the numerator and denominator. So, the value of (15 / x) will be: (15 / x) = 1 / 20 = 0.05. So, the answer is 0.05."
+        }
     ];
 
     let currentQuestionIndex = 0;
     let score = 0;
-    const totalTimeInSeconds = 10; // Change to 600 for 10 minutes
+    const totalTimeInSeconds = 600; // 10 minutes
     let timeRemaining = totalTimeInSeconds;
 
     // Function to display question and options
@@ -77,7 +131,7 @@
         const optionsElement = document.getElementById('options');
         const currentQuestion = questions[currentQuestionIndex];
 
-        questionElement.textContent = currentQuestion.question;
+        questionElement.innerHTML = currentQuestion.question;
         optionsElement.innerHTML = '';
 
         currentQuestion.options.forEach((option, index) => {
@@ -95,7 +149,7 @@
     function checkAnswer() {
         const currentQuestion = questions[currentQuestionIndex];
         const selectedOption = document.querySelector('input[name="options"]:checked');
-        
+
         if (selectedOption) {
             const userAnswer = selectedOption.value;
             if (userAnswer === currentQuestion.answer) {
