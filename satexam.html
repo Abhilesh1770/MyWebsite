@@ -39,6 +39,10 @@
         font-size: 18px;
         margin-bottom: 20px;
     }
+    #score {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
 </style>
 </head>
 <body>
@@ -49,6 +53,7 @@
     <div class="options" id="options"></div>
     <button id="nextBtn">Next Question</button>
     <div id="warning" style="display: none; color: red;">Please use the provided buttons to navigate the quiz.</div>
+    <div id="score" style="display: none;">Your Score: <span id="scoreValue"></span></div>
 </div>
 
 <script>
@@ -63,8 +68,9 @@
     ];
 
     let currentQuestionIndex = 0;
-    const totalTimeInSeconds = 600; // 10 minutes
+    const totalTimeInSeconds = 10; // Change time for testing purposes (10 seconds)
     let timeRemaining = totalTimeInSeconds;
+    let userAnswers = []; // Array to store user's answers
 
     // Function to display question and options
     function displayQuestion() {
@@ -88,6 +94,7 @@
 
     // Function to check the selected answer
     function checkAnswer(selectedOption) {
+        userAnswers[currentQuestionIndex] = selectedOption; // Store user's answer
         const currentQuestion = questions[currentQuestionIndex];
         if (selectedOption === currentQuestion.answer) {
             // Correct answer, you can add your logic here
@@ -102,8 +109,8 @@
         if (currentQuestionIndex < questions.length) {
             displayQuestion();
         } else {
-            // Quiz ends, you can add your logic here
-            console.log('Quiz finished!');
+            // Quiz ends, calculate score
+            calculateScore();
         }
     }
 
@@ -115,12 +122,39 @@
         timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
         if (timeRemaining === 0) {
-            // Time's up, you can add your logic here
-            console.log('Time\'s up!');
+            // Time's up, handle unanswered question
+            handleUnansweredQuestion();
         } else {
             timeRemaining--;
             setTimeout(updateTimer, 1000);
         }
+    }
+
+    // Function to handle unanswered question
+    function handleUnansweredQuestion() {
+        userAnswers[currentQuestionIndex] = ''; // Mark question as unanswered
+        console.log('Time\'s up!');
+        // Move to the next question
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+        } else {
+            // Quiz ends, calculate score
+            calculateScore();
+        }
+    }
+
+    // Function to calculate the score
+    function calculateScore() {
+        let score = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] === questions[i].answer) {
+                score++;
+            }
+        }
+        const scoreElement = document.getElementById('scoreValue');
+        scoreElement.textContent = score;
+        document.getElementById('score').style.display = 'block';
     }
 
     // Start the quiz
@@ -133,8 +167,8 @@
         if (currentQuestionIndex < questions.length) {
             displayQuestion();
         } else {
-            // Quiz ends, you can add your logic here
-            console.log('Quiz finished!');
+            // Quiz ends, calculate score
+            calculateScore();
         }
     });
 
