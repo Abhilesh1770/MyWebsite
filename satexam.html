@@ -148,6 +148,14 @@
         }
     });
 
+    // Event listener to warn user when trying to refresh the page
+    window.addEventListener('beforeunload', function(event) {
+        // Cancel the event
+        event.preventDefault();
+        // Chrome requires returnValue to be set
+        event.returnValue = '';
+    });
+
     // Homepage redirect function
     function redirectToHomepage() {
         window.location.href = 'http://abhileshkarn.com.np';
