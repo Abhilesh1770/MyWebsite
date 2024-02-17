@@ -20,6 +20,7 @@
         background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Drop shadow */
+        position: relative; /* To handle the position of the images */
     }
     .question {
         font-size: 18px;
@@ -42,12 +43,21 @@
     #score {
         font-size: 18px;
     }
+    #timer-images {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
 </style>
 </head>
 <body>
 <div class="container">
     <h1>General Knowledge Quiz</h1>
-    <div id="timer">Time Left: <span id="time">10:00</span></div>
+    <div id="timer">Time Left: <span id="time">60</span> seconds</div>
+    <div id="timer-images">
+        <img id="gifTimer" src="https://i0.wp.com/meeting.toolchest.org/wp-content/uploads/Timer-60sec.gif?resize=480%2C480&ssl=1" alt="Timer GIF">
+        <img id="warningImg" src="https://i.gifer.com/YiE0.gif" alt="Warning GIF" style="display: none;">
+    </div>
     <div id="question"></div>
     <div class="options" id="options"></div>
     <button id="nextBtn">Next Question</button>
@@ -126,7 +136,7 @@
 
     let currentQuestionIndex = 0;
     let score = 0;
-    const totalTimeInSeconds = 600; // 10 minutes
+    const totalTimeInSeconds = 60; // 60 seconds
     let timeRemaining = totalTimeInSeconds;
 
     // Function to display question and options
@@ -182,13 +192,31 @@
     // Function to update timer
     function updateTimer() {
         const timerElement = document.getElementById('time');
+        const gifTimerElement = document.getElementById('gifTimer');
+        const warningImgElement = document.getElementById('warningImg');
+
         const minutes = Math.floor(timeRemaining / 60);
         const seconds = timeRemaining % 60;
-        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        timerElement.textContent = `${seconds.toString().padStart(2, '0')}`;
+
+        if (timeRemaining === 20) {
+            // Show warning at 20 seconds
+            document.getElementById('warning').style.display = 'block';
+            warningImgElement.style.display = 'block';
+        }
 
         if (timeRemaining === 0) {
             // Time's up, move to the next question
             checkAnswer();
         } else {
             timeRemaining--;
-            setTimeout(update
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    // Start quiz
+    displayQuestion();
+    updateTimer();
+</script>
+</body>
+</html>
