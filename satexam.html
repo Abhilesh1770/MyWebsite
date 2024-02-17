@@ -25,6 +25,7 @@
     .question {
         font-size: 18px;
         margin-bottom: 10px;
+        cursor: pointer; /* Make the questions clickable */
     }
     .options {
         margin-bottom: 20px;
@@ -32,6 +33,7 @@
     .option {
         display: block;
         margin-bottom: 5px;
+        cursor: pointer; /* Make the options clickable */
     }
     .option input {
         margin-right: 5px;
@@ -44,10 +46,10 @@
         font-size: 18px;
     }
     #gifTimer, #warningImg {
-        width: 112.5px; /* Increased size by 50% */
-        height: 112.5px; /* Increased size by 50% */
+        width: 50px; /* Reduced size */
+        height: 50px; /* Reduced size */
         position: absolute;
-        top: 20px;
+        bottom: 20px; /* Positioned at the bottom */
     }
     #gifTimer {
         left: 20px;
@@ -63,12 +65,6 @@
 <body>
 <div class="container">
     <h1>General Knowledge Quiz</h1>
-    <div id="gifTimer">
-        <img src="https://i0.wp.com/meeting.toolchest.org/wp-content/uploads/Timer-60sec.gif?resize=480%2C480&ssl=1" alt="Timer GIF">
-    </div>
-    <div id="warningImg" style="display: none;">
-        <img src="https://i.gifer.com/YiE0.gif" alt="Warning GIF">
-    </div>
     <div id="question"></div>
     <div class="options" id="options"></div>
     <button id="nextBtn">Next Question</button>
@@ -77,6 +73,9 @@
     <div id="answerExplanation">
         <p><strong>Answer:</strong> <span id="answer"></span></p>
         <p><strong>Explanation:</strong> <span id="explanation"></span></p>
+    </div>
+    <div id="gifTimer">
+        <img src="https://i.gifer.com/RMs3.gif" alt="Timer GIF">
     </div>
 </div>
 
@@ -143,11 +142,6 @@
             answer: "0.05",
             explanation: "The given expression is (x / 15) = 20. To find the reciprocal of the given term, then just interchange the numerator and denominator. So, the value of (15 / x) will be: (15 / x) = 1 / 20 = 0.05. So, the answer is 0.05."
         }
-
-
-
-        
-        // Add more questions similarly
     ];
 
     let currentQuestionIndex = 0;
