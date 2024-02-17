@@ -10,11 +10,16 @@
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
+        background-image: url('https://cdn.pixabay.com/photo/2016/05/05/02/37/sunset-1373171_1280.jpg');
+        background-size: cover;
     }
     .container {
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
+        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Drop shadow */
     }
     .question {
         font-size: 18px;
@@ -24,10 +29,15 @@
         margin-bottom: 20px;
     }
     .option {
+        display: block;
         margin-bottom: 5px;
+    }
+    .option input {
+        margin-right: 5px;
     }
     #timer {
         font-size: 18px;
+        margin-bottom: 20px;
     }
 </style>
 </head>
@@ -65,15 +75,14 @@
         questionElement.textContent = currentQuestion.question;
         optionsElement.innerHTML = '';
 
-        currentQuestion.options.forEach(option => {
+        currentQuestion.options.forEach((option, index) => {
             const optionElement = document.createElement('div');
             optionElement.className = 'option';
-            optionElement.textContent = option;
+            optionElement.innerHTML = `
+                <input type="radio" id="option${index}" name="options" value="${option}">
+                <label for="option${index}">${option}</label>
+            `;
             optionsElement.appendChild(optionElement);
-
-            optionElement.addEventListener('click', () => {
-                checkAnswer(option);
-            });
         });
     }
 
