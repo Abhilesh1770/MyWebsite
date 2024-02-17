@@ -1,47 +1,147 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAT Exam</title>
-    <style>
-        /* Add your CSS styles here for better appearance */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Knowledge Quiz</title>
+<style>
+    /* Styles for quiz layout */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .question {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    .options {
+        margin-bottom: 20px;
+    }
+    .option {
+        margin-bottom: 5px;
+    }
+    #timer {
+        font-size: 18px;
+    }
+</style>
 </head>
 <body>
-    <h1>SAT Exam</h1>
-    <div id="timer">45:00</div>
-    <form id="exam-form">
-        <!-- Question 1 -->
-        <p>1) Which of the following statements is true concerning the equation below?</p>
-        <p>2(x - 5) = 2x - 5</p>
-        <label><input type="radio" name="q1" value="a"> A. The equation has no solutions.</label><br>
-        <label><input type="radio" name="q1" value="b"> B. The equation has one positive solution.</label><br>
-        <label><input type="radio" name="q1" value="c"> C. The equation has one negative solution.</label><br>
-        <label><input type="radio" name="q1" value="d"> D. The equation has infinitely many solutions.</label><br><br>
+<div class="container">
+    <h1>General Knowledge Quiz</h1>
+    <div id="timer">Time Left: <span id="time">10:00</span></div>
+    <div id="question"></div>
+    <div class="options" id="options"></div>
+    <button id="nextBtn">Next Question</button>
+    <div id="warning" style="display: none; color: red;">Please use the provided buttons to navigate the quiz.</div>
+</div>
 
-        <!-- Question 2 -->
-        <p>2) If a small juice can contains 6 ounces of juice, how many quarts of juice are in a carton that contains 24 small cans? (1 quart = 32 ounces)</p>
-        <label><input type="radio" name="q2" value="a"> A. 3.5</label><br>
-        <label><input type="radio" name="q2" value="b"> B. 4</label><br>
-        <label><input type="radio" name="q2" value="c"> C. 4.5</label><br>
-        <label><input type="radio" name="q2" value="d"> D. 5</label><br><br>
+<script>
+    // Array of questions and answers
+    const questions = [
+        {
+            question: "What is the capital of France?",
+            options: ["Paris", "London", "Rome", "Berlin"],
+            answer: "Paris"
+        },
+        // Add more questions similarly
+    ];
 
-        <!-- Add more questions here... -->
+    let currentQuestionIndex = 0;
+    const totalTimeInSeconds = 600; // 10 minutes
+    let timeRemaining = totalTimeInSeconds;
 
-        <!-- Question 30 -->
-        <p>30) Question text for the 30th question</p>
-        <label><input type="radio" name="q30" value="a"> A. Option A</label><br>
-        <label><input type="radio" name="q30" value="b"> B. Option B</label><br>
-        <label><input type="radio" name="q30" value="c"> C. Option C</label><br>
-        <label><input type="radio" name="q30" value="d"> D. Option D</label><br><br>
+    // Function to display question and options
+    function displayQuestion() {
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const currentQuestion = questions[currentQuestionIndex];
 
-        <!-- Submit Button -->
-        <input type="submit" value="Submit">
-    </form>
+        questionElement.textContent = currentQuestion.question;
+        optionsElement.innerHTML = '';
 
-    <script>
-        // JavaScript code for timer, automatic submission, and scoring goes here
-    </script>
+        currentQuestion.options.forEach(option => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+            optionElement.textContent = option;
+            optionsElement.appendChild(optionElement);
+
+            optionElement.addEventListener('click', () => {
+                checkAnswer(option);
+            });
+        });
+    }
+
+    // Function to check the selected answer
+    function checkAnswer(selectedOption) {
+        const currentQuestion = questions[currentQuestionIndex];
+        if (selectedOption === currentQuestion.answer) {
+            // Correct answer, you can add your logic here
+            console.log('Correct!');
+        } else {
+            // Incorrect answer, you can add your logic here
+            console.log('Incorrect!');
+        }
+
+        // Move to the next question
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+        } else {
+            // Quiz ends, you can add your logic here
+            console.log('Quiz finished!');
+        }
+    }
+
+    // Function to update timer
+    function updateTimer() {
+        const timerElement = document.getElementById('time');
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        if (timeRemaining === 0) {
+            // Time's up, you can add your logic here
+            console.log('Time\'s up!');
+        } else {
+            timeRemaining--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    // Start the quiz
+    displayQuestion();
+    updateTimer();
+
+    // Event listener for next question button
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+        } else {
+            // Quiz ends, you can add your logic here
+            console.log('Quiz finished!');
+        }
+    });
+
+    // Event listener to warn user when pressing other keys
+    window.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') {
+            const warningElement = document.getElementById('warning');
+            warningElement.style.display = 'block';
+        }
+    });
+
+    // Homepage redirect function
+    function redirectToHomepage() {
+        window.location.href = 'http://abhileshkarn.com.np';
+    }
+</script>
+<button onclick="redirectToHomepage()" style="position: fixed; top: 20px; right: 20px;">Homepage</button>
 </body>
 </html>
