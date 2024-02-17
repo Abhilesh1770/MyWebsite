@@ -46,13 +46,17 @@
 </head>
 <body>
 <div class="container">
-    <h1>SAT Mock Test 01</h1>
-    <div id="timer">Time Left: <span id="time">60:00</span></div>
+    <h1>General Knowledge Quiz</h1>
+    <div id="timer">Time Left: <span id="time">10:00</span></div>
     <div id="question"></div>
     <div class="options" id="options"></div>
     <button id="nextBtn">Next Question</button>
     <div id="warning" style="display: none; color: red;">Please use the provided buttons to navigate the quiz.</div>
     <div id="score">Score: <span id="scoreValue">0</span></div>
+    <div id="answerExplanation" style="display: none;">
+        <p><strong>Answer:</strong> <span id="answer"></span></p>
+        <p><strong>Explanation:</strong> <span id="explanation"></span></p>
+    </div>
 </div>
 
 <script>
@@ -86,10 +90,10 @@
             question: "In a specific rectangular area, the length-to-width ratio is 45 : 15. If the width of the region grows by 8 units, how should the length be adjusted to uphold this ratio?",
             options: ["It must decrease by 24.5 units.", "It must increase by 24.5 units.", "It must decrease by 24 units.", "It must increase by 24 units."],
             answer: "It must increase by 24 units.",
-            explanation: "The ratio of length to width is 45 : 15. Let the length be 45 and width be 15. After increasing the width, new width will be: 15 + 8 = 23. Let the new length be l’, so to keep the ratio same the new length should be: (l’ / 23) = (45 / 15) => l’ = 3 * 23 = 69. So, new length should be 69, that is, it should increase by 24 units."
+            explanation: "The ratio of length to width is 45 : 15. Let the length be 45 and width be 15. After increasing the width, the new width will be: 15 + 8 = 23. Let the new length be l’, so to keep the ratio same the new length should be: (l’ / 23) = (45 / 15) => l’ = 3 * 23 = 69. So, new length should be 69 that is it should increase by 24 units."
         },
         {
-            question: "The table displays three sets of values for x and their corresponding f(x) values for a linear function f. What equation accurately represents the definition of f(x)?<br><br>x   f(x)<br>0   65<br>1   73<br>2   81",
+            question: "The table displays three sets of values for x and their corresponding f(x) values for a linear function f. What equation accurately represents the definition of f(x)?",
             options: ["f(x) = 6x + 65", "f(x) = 8x + 65", "f(x) = 65x + 73", "f(x) = 73x + 81"],
             answer: "f(x) = 8x + 65",
             explanation: "The constant value of the function is 65. And, after every increase in the value of x the value of the function is increased by 8. So, the equation for the f(x) will be: f(x) = 8x + 65."
@@ -157,6 +161,10 @@
                 score++;
                 document.getElementById('scoreValue').textContent = score;
             }
+            // Display answer and explanation
+            document.getElementById('answer').textContent = currentQuestion.answer;
+            document.getElementById('explanation').textContent = currentQuestion.explanation;
+            document.getElementById('answerExplanation').style.display = 'block';
         }
 
         // Move to the next question
@@ -183,38 +191,4 @@
             checkAnswer();
         } else {
             timeRemaining--;
-            setTimeout(updateTimer, 1000);
-        }
-    }
-
-    // Start the quiz
-    displayQuestion();
-    updateTimer();
-
-    // Event listener for next question button
-    document.getElementById('nextBtn').addEventListener('click', checkAnswer);
-
-    // Event listener to warn user when pressing other keys
-    window.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter' && event.key !== ' ') {
-            const warningElement = document.getElementById('warning');
-            warningElement.style.display = 'block';
-        }
-    });
-
-    // Event listener to warn user when trying to refresh the page
-    window.addEventListener('beforeunload', function(event) {
-        // Cancel the event
-        event.preventDefault();
-        // Chrome requires returnValue to be set
-        event.returnValue = '';
-    });
-
-    // Homepage redirect function
-    function redirectToHomepage() {
-        window.location.href = 'http://abhileshkarn.com.np';
-    }
-</script>
-<button onclick="redirectToHomepage()" style="position: fixed; top: 20px; right: 20px;">Homepage</button>
-</body>
-</html>
+            setTimeout(update
