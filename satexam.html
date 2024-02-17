@@ -38,16 +38,18 @@
     .option input {
         margin-right: 5px;
     }
-    #timer {
+    #timerContainer {
         font-size: 18px;
         margin-bottom: 20px;
+        display: flex;
+        align-items: center;
     }
-    #score {
-        font-size: 18px;
+    #timerText {
+        margin-right: 10px;
     }
     #gifTimer, #warningImg {
-        width: 50px; /* Reduced size */
-        height: 50px; /* Reduced size */
+        width: 70%; /* Decreased size to 70% */
+        max-width: 150px; /* Maximum width */
         position: absolute;
         bottom: 20px; /* Positioned at the bottom */
     }
@@ -73,6 +75,10 @@
     <div id="answerExplanation">
         <p><strong>Answer:</strong> <span id="answer"></span></p>
         <p><strong>Explanation:</strong> <span id="explanation"></span></p>
+    </div>
+    <div id="timerContainer">
+        <span id="timerText">Time Left:</span>
+        <span id="timer"></span>
     </div>
     <div id="gifTimer">
         <img src="https://i.gifer.com/RMs3.gif" alt="Timer GIF">
@@ -113,120 +119,110 @@
             explanation: "The ratio of length to width is 45 : 15. Let the length be 45 and width be 15. After increasing the width, the new width will be: 15 + 8 = 23. Let the new length be l’, so to keep the ratio same the new length should be: (l’ / 23) = (45 / 15) => l’ = 3 * 23 = 69. So, new length should be 69 that is it should increase by 24 units."
         },
         {
-            question: "The table displays three sets of values for x and their corresponding f(x) values for a linear function f. What equation accurately represents the definition of f(x)?",
-            options: ["f(x) = 6x + 65", "f(x) = 8x + 65", "f(x) = 65x + 73", "f(x) = 73x + 81"],
-            answer: "f(x) = 8x + 65",
-            explanation: "The constant value of the function is 65. And, after every increase in the value of x the value of the function is increased by 8. So, the equation for the f(x) will be: f(x) = 8x + 65."
-        },
-        {
-            question: "7 added to 4 times a quantity y is equal to 62. Which equation represents this condition?",
-            options: ["7(4y) = 62", "7 – 4y = 62", "7 + 4y = 62", "4y – 7 = 62"],
-            answer: "7 + 4y = 62",
-            explanation: "The statement is 'Seven added to four times a quantity y is equal to 62.' The equation starts with 7, which represents the initial value. Then, 4y signifies four times the quantity y. When we add these two parts together, we get the total, which is equal to 62. So, the equation will be 7 + 4y = 62."
-        },
-        {
-            question: "What is the equation that defines line p in the xy-plane, given that it passes through the point (-4, 6) and has a slope of 6?",
-            options: ["y = 6x + 30", "y = 6x – 30", "y = 6 + 30x", "y = 6x – 30x"],
-            answer: "y = 6x + 30",
-            explanation: "The equation of a line when it passes through a point and given slope is: y – y1 = Slope(x – x1). So, inserting the values in the above expression as: y – 6 = 6(x – (-4)) => y – 6 = 6x + 24 => y = 6x + 30. So, the equation will be y = 6x + 30."
-        },
-        {
-            question: "For a cost of $57, how many pounds of avocados were bought at a rate of $19 per pound?",
-            options: ["100", "3", "57", "19"],
-            answer: "3",
-            explanation: "To find out how many pounds of avocados were purchased, given that they cost $57 at a rate of $19 per pound, we can set up an equation. Let x represent the number of pounds of avocados purchased. The cost of the avocados can be calculated by multiplying the number of pounds by the cost per pound. Given that the cost of the avocados is $57 and the cost per pound is $19, we can write the equation: 57 = 19x. Now, to find the value of x, we’ll solve for x: x = 57 / 19 = 3. So, the customer purchased 3 pounds of avocados."
-        },
-        {
-            question: "If (x / 15) = 20, what is the value of (15 / x)?",
-            options: ["6", "0.05", "0.5", "5"],
-            answer: "0.05",
-            explanation: "The given expression is (x / 15) = 20. To find the reciprocal of the given term, then just interchange the numerator and denominator. So, the value of (15 / x) will be: (15 / x) = 1 / 20 = 0.05. So, the answer is 0.05."
+            question: "The table displays three sets of values for x and their corresponding",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            answer: "Option 1",
+            explanation: "Explanation for the answer goes here."
         }
     ];
 
+    // Variables to track quiz state
     let currentQuestionIndex = 0;
     let score = 0;
-    const totalTimeInSeconds = 60; // 60 seconds
-    let timeRemaining = totalTimeInSeconds;
+    const totalQuestions = questions.length;
+    const timeLimit = 60; // Time limit for each question in seconds
+    let timeLeft = timeLimit;
+    let timerInterval;
 
-    // Function to display question and options
-    function displayQuestion() {
+    // Function to initialize quiz
+    function initializeQuiz() {
+        showQuestion();
+        startTimer();
+    }
+
+    // Function to display current question and options
+    function showQuestion() {
+        const currentQuestion = questions[currentQuestionIndex];
         const questionElement = document.getElementById('question');
         const optionsElement = document.getElementById('options');
-        const currentQuestion = questions[currentQuestionIndex];
+        const scoreElement = document.getElementById('scoreValue');
 
         questionElement.innerHTML = currentQuestion.question;
         optionsElement.innerHTML = '';
 
-        currentQuestion.options.forEach((option, index) => {
+        // Display options
+        currentQuestion.options.forEach(option => {
             const optionElement = document.createElement('div');
             optionElement.className = 'option';
-            optionElement.innerHTML = `
-                <input type="radio" id="option${index}" name="options" value="${option}">
-                <label for="option${index}">${option}</label>
-            `;
+            optionElement.innerHTML = `<input type="radio" name="option" value="${option}">${option}`;
+            optionElement.addEventListener('click', () => selectOption(option, currentQuestion.answer));
             optionsElement.appendChild(optionElement);
         });
+
+        // Update score
+        scoreElement.textContent = score;
     }
 
-    // Function to check the selected answer
-    function checkAnswer() {
-        const currentQuestion = questions[currentQuestionIndex];
-        const selectedOption = document.querySelector('input[name="options"]:checked');
+    // Function to handle option selection
+    function selectOption(selectedOption, correctAnswer) {
+        clearInterval(timerInterval); // Stop the timer
+        const explanationElement = document.getElementById('answerExplanation');
+        const scoreElement = document.getElementById('scoreValue');
+        const warningElement = document.getElementById('warning');
 
-        if (selectedOption) {
-            const userAnswer = selectedOption.value;
-            if (userAnswer === currentQuestion.answer) {
-                // Correct answer
-                score++;
-                document.getElementById('scoreValue').textContent = score;
-            }
-            // Display answer and explanation
-            document.getElementById('answer').textContent = currentQuestion.answer;
-            document.getElementById('explanation').textContent = currentQuestion.explanation;
-            document.getElementById('answerExplanation').style.display = 'block';
+        if (selectedOption === correctAnswer) {
+            score++;
+            scoreElement.textContent = score;
+            explanationElement.innerHTML = `
+                <p><strong>Correct!</strong></p>
+                <p><strong>Explanation:</strong> ${questions[currentQuestionIndex].explanation}</p>
+            `;
+        } else {
+            explanationElement.innerHTML = `
+                <p><strong>Incorrect!</strong></p>
+                <p><strong>Explanation:</strong> ${questions[currentQuestionIndex].explanation}</p>
+            `;
         }
 
-        // Move to the next question
+        explanationElement.style.display = 'block';
+        warningElement.style.display = 'none';
+
         currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            displayQuestion();
+        if (currentQuestionIndex < totalQuestions) {
+            setTimeout(() => {
+                showQuestion();
+                startTimer();
+                explanationElement.style.display = 'none';
+            }, 2000); // Wait for 2 seconds before showing the next question
         } else {
             // Quiz ends
-            console.log('Quiz finished!');
-            console.log('Score:', score);
-            document.getElementById('nextBtn').disabled = true; // Disable the next button
+            alert(`Quiz ends!\nYour score: ${score} / ${totalQuestions}`);
         }
     }
 
-    // Function to update timer
-    function updateTimer() {
-        const timerElement = document.getElementById('timer');
-        const gifTimerElement = document.getElementById('gifTimer');
-        const warningImgElement = document.getElementById('warningImg');
-
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        timerElement.textContent = `${seconds.toString().padStart(2, '0')}`;
-
-        if (timeRemaining === 20) {
-            // Show warning at 20 seconds
-            document.getElementById('warning').style.display = 'block';
-            warningImgElement.style.display = 'block';
-        }
-
-        if (timeRemaining === 0) {
-            // Time's up, move to the next question
-            checkAnswer();
-        } else {
-            timeRemaining--;
-            setTimeout(updateTimer, 1000);
-        }
+    // Function to start the timer
+    function startTimer() {
+        timeLeft = timeLimit;
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').textContent = timeLeft;
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                alert('Time\'s up!');
+                currentQuestionIndex++;
+                if (currentQuestionIndex < totalQuestions) {
+                    showQuestion();
+                    startTimer();
+                } else {
+                    // Quiz ends
+                    alert(`Quiz ends!\nYour score: ${score} / ${totalQuestions}`);
+                }
+            }
+        }, 1000); // Update every second
     }
 
-    // Start quiz
-    displayQuestion();
-    updateTimer();
+    // Start the quiz when the page loads
+    window.onload = initializeQuiz;
 </script>
 </body>
 </html>
