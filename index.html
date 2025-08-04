@@ -82,7 +82,6 @@
     </div>
 
     <script>
-        // Simple WebRTC implementation without peer IDs
         document.addEventListener('DOMContentLoaded', function() {
             const localVideo = document.getElementById('local-video');
             const remoteVideo = document.getElementById('remote-video');
@@ -95,65 +94,12 @@
             
             let localStream;
             let peerConnection;
+            let socket;
             let roomName;
-            let dataChannel;
             
-            // Simple signaling simulation (in reality you'd need a signaling server)
-            const signaling = {
-                sendOffer: async (offer) => {
-                    // In a real app, this would send to signaling server
-                    localStorage.setItem(`${roomName}_offer`, JSON.stringify(offer));
-                },
-                sendAnswer: async (answer) => {
-                    // In a real app, this would send to signaling server
-                    localStorage.setItem(`${roomName}_answer`, JSON.stringify(answer));
-                },
-                sendCandidate: async (candidate) => {
-                    // In a real app, this would send to signaling server
-                    localStorage.setItem(`${roomName}_candidate`, JSON.stringify(candidate));
-                },
-                waitForAnswer: async () => {
-                    return new Promise(resolve => {
-                        const check = () => {
-                            const answer = localStorage.getItem(`${roomName}_answer`);
-                            if (answer) {
-                                resolve(JSON.parse(answer));
-                            } else {
-                                setTimeout(check, 500);
-                            }
-                        };
-                        check();
-                    });
-                },
-                waitForOffer: async () => {
-                    return new Promise(resolve => {
-                        const check = () => {
-                            const offer = localStorage.getItem(`${roomName}_offer`);
-                            if (offer) {
-                                resolve(JSON.parse(offer));
-                            } else {
-                                setTimeout(check, 500);
-                            }
-                        };
-                        check();
-                    });
-                },
-                waitForCandidate: async () => {
-                    return new Promise(resolve => {
-                        const check = () => {
-                            const candidate = localStorage.getItem(`${roomName}_candidate`);
-                            if (candidate) {
-                                resolve(JSON.parse(candidate));
-                            } else {
-                                setTimeout(check, 500);
-                            }
-                        };
-                        check();
-                    });
-                }
-            };
+            // Using a public signaling server (for demo purposes)
+            const SIGNALING_SERVER_URL = 'wss://signaling.simplewebrtc.com:443/ws';
             
-            // Initialize media
             async function initMedia() {
                 try {
                     localStream = await navigator.mediaDevices.getUserMedia({
@@ -170,7 +116,6 @@
                 }
             }
             
-            // Create peer connection
             function createPeerConnection() {
                 const config = {
                     iceServers: [
@@ -188,89 +133,28 @@
                 // Handle remote stream
                 peerConnection.ontrack = (event) => {
                     remoteVideo.srcObject = event.streams[0];
+                    statusDiv.textContent = "Connected!";
+                    statusDiv.className = "connected";
                 };
                 
                 // Handle ICE candidates
                 peerConnection.onicecandidate = (event) => {
                     if (event.candidate) {
-                        signaling.sendCandidate(event.candidate);
+                        socket.send(JSON.stringify({
+                            type: 'candidate',
+                            candidate: event.candidate,
+                            room: roomName
+                        }));
                     }
                 };
                 
-                // Create data channel (for future text chat, etc.)
-                dataChannel = peerConnection.createDataChannel('chat');
-                setupDataChannel();
-            }
-            
-            function setupDataChannel() {
-                dataChannel.onopen = () => {
-                    console.log("Data channel opened");
-                };
-                dataChannel.onmessage = (event) => {
-                    console.log("Message received:", event.data);
-                };
-                dataChannel.onclose = () => {
-                    console.log("Data channel closed");
+                peerConnection.oniceconnectionstatechange = () => {
+                    if (peerConnection.iceConnectionState === 'disconnected') {
+                        leaveRoom();
+                    }
                 };
             }
             
-            // Join room as caller
-            async function joinAsCaller() {
-                statusDiv.textContent = "Creating offer...";
-                statusDiv.className = "connecting";
-                
-                createPeerConnection();
-                
-                // Create offer
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
-                
-                // Send offer
-                await signaling.sendOffer(offer);
-                
-                // Wait for answer
-                statusDiv.textContent = "Waiting for answer...";
-                const answer = await signaling.waitForAnswer();
-                await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-                
-                // Wait for ICE candidate
-                statusDiv.textContent = "Connecting...";
-                const candidate = await signaling.waitForCandidate();
-                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-                
-                statusDiv.textContent = "Connected!";
-                statusDiv.className = "connected";
-            }
-            
-            // Join room as callee
-            async function joinAsCallee() {
-                statusDiv.textContent = "Waiting for offer...";
-                statusDiv.className = "connecting";
-                
-                // Wait for offer
-                const offer = await signaling.waitForOffer();
-                
-                createPeerConnection();
-                
-                await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-                
-                // Create answer
-                const answer = await peerConnection.createAnswer();
-                await peerConnection.setLocalDescription(answer);
-                
-                // Send answer
-                await signaling.sendAnswer(answer);
-                
-                // Wait for ICE candidate
-                statusDiv.textContent = "Connecting...";
-                const candidate = await signaling.waitForCandidate();
-                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-                
-                statusDiv.textContent = "Connected!";
-                statusDiv.className = "connected";
-            }
-            
-            // Join room
             async function joinRoom() {
                 roomName = roomNameInput.value.trim();
                 if (!roomName) {
@@ -280,25 +164,62 @@
                 
                 if (!await initMedia()) return;
                 
-                // Check if room exists (has offer)
-                const existingOffer = localStorage.getItem(`${roomName}_offer`);
+                // Connect to signaling server
+                socket = new WebSocket(SIGNALING_SERVER_URL);
                 
-                if (existingOffer) {
-                    await joinAsCallee();
-                } else {
-                    await joinAsCaller();
-                }
+                socket.onopen = () => {
+                    socket.send(JSON.stringify({
+                        type: 'join',
+                        room: roomName
+                    }));
+                    statusDiv.textContent = "Waiting for another participant...";
+                    statusDiv.className = "connecting";
+                };
+                
+                socket.onmessage = async (event) => {
+                    const message = JSON.parse(event.data);
+                    
+                    if (message.type === 'offer') {
+                        if (!peerConnection) createPeerConnection();
+                        
+                        await peerConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
+                        const answer = await peerConnection.createAnswer();
+                        await peerConnection.setLocalDescription(answer);
+                        
+                        socket.send(JSON.stringify({
+                            type: 'answer',
+                            answer: answer,
+                            room: roomName
+                        }));
+                    } 
+                    else if (message.type === 'answer') {
+                        await peerConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
+                    } 
+                    else if (message.type === 'candidate') {
+                        if (peerConnection) {
+                            await peerConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
+                        }
+                    }
+                };
+                
+                socket.onclose = () => {
+                    leaveRoom();
+                };
                 
                 joinBtn.disabled = true;
                 leaveBtn.disabled = false;
                 roomNameInput.disabled = true;
             }
             
-            // Leave room
             function leaveRoom() {
                 if (peerConnection) {
                     peerConnection.close();
                     peerConnection = null;
+                }
+                
+                if (socket) {
+                    socket.close();
+                    socket = null;
                 }
                 
                 if (localStream) {
@@ -308,11 +229,6 @@
                 
                 remoteVideo.srcObject = null;
                 
-                // Clean up signaling
-                localStorage.removeItem(`${roomName}_offer`);
-                localStorage.removeItem(`${roomName}_answer`);
-                localStorage.removeItem(`${roomName}_candidate`);
-                
                 statusDiv.textContent = "Disconnected";
                 statusDiv.className = "disconnected";
                 
@@ -321,7 +237,6 @@
                 roomNameInput.disabled = false;
             }
             
-            // Toggle video
             function toggleVideo() {
                 if (!localStream) return;
                 const videoTrack = localStream.getVideoTracks()[0];
@@ -331,7 +246,6 @@
                 }
             }
             
-            // Toggle audio
             function toggleAudio() {
                 if (!localStream) return;
                 const audioTrack = localStream.getAudioTracks()[0];
@@ -349,4 +263,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
