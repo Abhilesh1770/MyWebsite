@@ -1,105 +1,205 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Abhilesh Karn's Webpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Video Call</title>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <style>
-        /* Your CSS styles here */
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #666;
-            position: fixed;
-            top: 0;
-            width: 100%;
-        }
-        
-        li {
-            float: left;
-            border-right: 1px solid #bbb;
-        }
-        
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-        
-        li a:hover {
-            background-color: #111;
-        }
-        
-        .active {
-            background-color: #4CAF50;
-        }
-        
-        .main {
-            background-color: red;
-            text-align: center; /* Center align the content */
-            padding: 20px; /* Add padding for spacing */
-        }
-        
-        .article-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px; /* Add some space between the main content and articles */
-        }
-        
-        .article {
-            flex: 0 0 48%;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        #video-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        video {
+            background: #222;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 8px;
+        }
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 15px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1;
         }
     </style>
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const localVideo = document.getElementById('local-video');
+            const remoteVideo = document.getElementById('remote-video');
+            const peerIdInput = document.getElementById('peer-id-input');
+            const callBtn = document.getElementById('call-btn');
+            const endCallBtn = document.getElementById('end-call-btn');
+            const toggleVideoBtn = document.getElementById('toggle-video-btn');
+            const toggleAudioBtn = document.getElementById('toggle-audio-btn');
+            const yourIdDisplay = document.getElementById('your-id');
+
+            // Variables
+            let peer;
+            let localStream;
+            let currentCall;
+
+            // Initialize
+            async function init() {
+                try {
+                    // Get local video stream
+                    localStream = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: true
+                    });
+                    localVideo.srcObject = localStream;
+                    
+                    // Create PeerJS instance
+                    peer = new Peer();
+                    
+                    peer.on('open', (id) => {
+                        yourIdDisplay.textContent = id;
+                    });
+                    
+                    peer.on('call', (call) => {
+                        // Answer the call with our local stream
+                        call.answer(localStream);
+                        currentCall = call;
+                        
+                        call.on('stream', (remoteStream) => {
+                            remoteVideo.srcObject = remoteStream;
+                        });
+                        
+                        call.on('close', () => {
+                            endCall();
+                        });
+                        
+                        updateCallUI(true);
+                    });
+                    
+                    // Set up button event listeners
+                    callBtn.addEventListener('click', startCall);
+                    endCallBtn.addEventListener('click', endCall);
+                    toggleVideoBtn.addEventListener('click', toggleVideo);
+                    toggleAudioBtn.addEventListener('click', toggleAudio);
+                    
+                } catch (err) {
+                    console.error('Error initializing:', err);
+                    alert('Error accessing media devices or setting up peer connection: ' + err.message);
+                }
+            }
+
+            // Start a call
+            function startCall() {
+                const peerId = peerIdInput.value.trim();
+                if (!peerId) {
+                    alert('Please enter a peer ID');
+                    return;
+                }
+                
+                const call = peer.call(peerId, localStream);
+                currentCall = call;
+                
+                call.on('stream', (remoteStream) => {
+                    remoteVideo.srcObject = remoteStream;
+                });
+                
+                call.on('close', () => {
+                    endCall();
+                });
+                
+                updateCallUI(true);
+            }
+
+            // End the current call
+            function endCall() {
+                if (currentCall) {
+                    currentCall.close();
+                    currentCall = null;
+                }
+                remoteVideo.srcObject = null;
+                updateCallUI(false);
+            }
+
+            // Toggle video on/off
+            function toggleVideo() {
+                if (!localStream) return;
+                
+                const videoTrack = localStream.getVideoTracks()[0];
+                if (videoTrack) {
+                    videoTrack.enabled = !videoTrack.enabled;
+                    toggleVideoBtn.textContent = videoTrack.enabled ? 'Toggle Video' : 'Video Off';
+                }
+            }
+
+            // Toggle audio on/off
+            function toggleAudio() {
+                if (!localStream) return;
+                
+                const audioTrack = localStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    audioTrack.enabled = !audioTrack.enabled;
+                    toggleAudioBtn.textContent = audioTrack.enabled ? 'Toggle Audio' : 'Audio Off';
+                }
+            }
+
+            // Update UI based on call state
+            function updateCallUI(inCall) {
+                callBtn.disabled = inCall;
+                endCallBtn.disabled = !inCall;
+                peerIdInput.disabled = inCall;
+            }
+
+            // Initialize the app
+            init();
+        });
+    </script>
 </head>
 <body>
-    <div class="header"> 
-        <ul class="nav-links">
-            <li><a class="active" href="index.html">Home</a></li>
-            <li><a href="tech.html">Tech News</a></li>
-            <li><a href="health.html">Health And Fitness</a></li>
-            <li><a href="education.html">Education</a></li>
-            <li><a href="sports.html">Sports</a></li>
-            <li><a href="entertainment.html">Entertainment</a></li>
-            <li><a href="religion.html">Religion And Festival</a></li>
-            <li><a href="international.html">About</a></li>
-            <li><a href="reference.html">Refer</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </div>
-
-    <div class="main"> 
-        <p>Welcome To www.Abhileshkarn.com.np</p>
+    <h1>Simple Video Call</h1>
+    
+    <div id="video-container">
+        <video id="local-video" autoplay muted></video>
+        <video id="remote-video" autoplay></video>
     </div>
     
-    <div class="article-container">
-        <div class="article">
-            <h2><a href="login.html">SAT Preparation</a></h2>
-            <p>Resources and information for SAT preparation.</p>
-        </div>
-        <div class="article">
-            <h2><a href="login.html">GMAT Preparation</a></h2>
-            <p>Resources and information for GMAT preparation.</p>
-        </div>
+    <div class="controls">
+        <input type="text" id="peer-id-input" placeholder="Enter peer ID to call">
+        <button id="call-btn">Call</button>
+        <button id="end-call-btn" disabled>End Call</button>
+        <button id="toggle-video-btn">Toggle Video</button>
+        <button id="toggle-audio-btn">Toggle Audio</button>
     </div>
-
-    <div class="article-container">
-        <div class="article">
-            <h2><a href="login.html">GRE Preparation</a></h2>
-            <p>Resources and information for GRE preparation.</p>
-        </div>
-        <div class="article">
-            <h2><a href="login.html">IELTS Preparation</a></h2>
-            <p>Resources and information for IELTS preparation.</p>
-        </div>
+    
+    <div>
+        <p>Your ID: <span id="your-id">Generating ID...</span></p>
     </div>
-
 </body>
 </html>
