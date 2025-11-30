@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abhilesh Karn - CS Researcher Profile</title>
-    <!-- Load Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load React and ReactDOM from CDN -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- Load Tailwind CSS via CDN --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load React and ReactDOM from CDN --><script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- Load Babel for JSX support in the browser -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Load Babel for JSX support in the browser --><script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         /* Define a custom font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
             font-family: 'Inter', sans-serif;
+            /* Added background image styles */
+            background-image: url('https://wallpapers.com/images/featured-full/office-desk-a1yivbaxal92jim2.jpg');
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the image */
+            background-attachment: fixed; /* Keep image fixed during scroll */
+            background-repeat: no-repeat; /* Do not repeat the image */
         }
         /* Custom scrollbar styling for aesthetics */
         ::-webkit-scrollbar {
@@ -32,21 +35,28 @@
         p {
             word-break: break-word;
         }
+        /* Optional: Add a subtle overlay to make text more readable on background image */
+        .overlay-bg {
+            background-color: rgba(255, 255, 255, 0.85); /* White with 85% opacity */
+        }
+        .hero-section-bg {
+             background-color: rgba(255, 255, 255, 0.95); /* Slightly less opaque for hero */
+        }
     </style>
 </head>
 <body>
-    <!-- Root element where the React component will be mounted -->
-    <div id="root"></div>
+    <!-- Root element where the React component will be mounted --><div id="root"></div>
 
     <script type="text/babel">
         // Destructure React hooks
         const { useState } = React;
 
-        // The image URL provided by the user
+        // Reverting to the previous working image URL as requested by the user.
+        // NOTE: This image URL might be temporary due to Facebook's hosting restrictions.
         const PROFILE_IMAGE_URL = "https://scontent.fktm1-1.fna.fbcdn.net/v/t39.30808-6/514688166_30173354452310338_1016036038541282139_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeEdL7SFSxWopLfhglVD3lO_HrHHA4ddyOwesccDh13I7JHGr6RWZGdtDK8MC60nXQA6kVlRvibAIchwquTdJSbW&_nc_ohc=FGJ6zt3fe9gQ7kNvwGpUbt4&_nc_oc=AdlKoZ3Yr2GT62Lsv5nvjraraVxCMxrfHBy6-ll7e6swTFwD7k3MqzO6LFNL-hCYrY7vyAtfXU3uqLSO1uwoHT11&_nc_zt=23&_nc_ht=scontent.fktm1-1.fna&_nc_gid=XAQnXkROQL5duXm1wkbHSg&oh=00_AfgywNnba3OXH0lpnygXOt4-GJj8XBChLTMKIzlS55BKIA&oe=69319E23";
         
-        // Fallback placeholder image in case the CDN link expires
-        const FALLBACK_IMAGE_URL = "https://placehold.co/160x160/a78bfa/ffffff?text=AK";
+        // Fallback placeholder image in case the CDN link expires or is invalid
+        const FALLBACK_IMAGE_URL = "https://placehold.co/160x160/a78bfa/ffffff?text=AK"; // A simple placeholder with "AK"
 
         // Helper component for displaying non-clickable contact details
         function ContactDetail({ label, value, isPhone = false }) {
@@ -72,9 +82,9 @@
             };
 
             return (
-                <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50 text-gray-900">
+                <div className="min-h-screen"> {/* Removed gradient from here, now on body */}
                     {/* Navigation */}
-                    <nav className="bg-white/90 sticky top-0 z-10 shadow-lg backdrop-blur-sm">
+                    <nav className="bg-white/80 sticky top-0 z-10 shadow-lg backdrop-blur-sm"> {/* Reduced opacity slightly */}
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex justify-between items-center h-16">
                                 <div className="text-xl font-extrabold text-purple-700">Abhilesh Karn</div>
@@ -89,16 +99,16 @@
                     </nav>
 
                     {/* HERO SECTION */}
-                    <section className="flex flex-col items-center text-center py-20 px-6 bg-white shadow-xl max-w-7xl mx-auto rounded-b-2xl">
+                    <section className="flex flex-col items-center text-center py-20 px-6 hero-section-bg shadow-xl max-w-7xl mx-auto rounded-b-2xl mt-4"> {/* Added mt-4 for slight separation from nav */}
                         <img
                             src={PROFILE_IMAGE_URL}
                             alt="Abhilesh Karn Profile"
                             className="w-40 h-40 object-cover rounded-full shadow-2xl border-4 border-purple-600 transition duration-300 transform hover:scale-105"
-                            // Error handling for image URL
+                            // Error handling for image URL - this will trigger if the Facebook link doesn't directly point to an image
                             onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMAGE_URL; }}
                         />
                         <h1 className="text-5xl font-extrabold mt-6 text-purple-800 tracking-tight">Abhilesh Karn</h1>
-                        <p className="mt-4 max-w-3xl text-xl text-gray-600 font-medium">
+                        <p className="mt-4 max-w-3xl text-xl text-gray-700 font-medium">
                             CS Researcher specializing in <strong className="text-purple-700">Probabilistic Machine Learning</strong>,
                             <strong className="text-purple-700"> Reliability Modeling</strong>, and <strong className="text-purple-700">High‑Stakes Intelligent Systems</strong>.
                         </p>
@@ -133,10 +143,11 @@
                         </div>
                     </section>
 
+                    {/* All other sections now have a transparent white background */}
                     {/* SUMMARY */}
-                    <section id="summary" className="px-6 py-20 max-w-4xl mx-auto">
+                    <section id="summary" className="px-6 py-20 max-w-4xl mx-auto overlay-bg rounded-xl shadow-lg mt-8">
                         <h2 className="text-3xl font-bold text-purple-700 mb-8 border-b-2 border-purple-200 pb-2">Research Summary</h2>
-                        <p className="leading-relaxed text-lg text-gray-700 bg-white p-6 rounded-xl shadow-lg">
+                        <p className="leading-relaxed text-lg text-gray-700 p-2">
                             Focused on developing mathematically grounded probabilistic models for
                             <strong className="text-indigo-600"> system reliability</strong>, <strong className="text-indigo-600">uncertainty calibration</strong>, and
                             <strong className="text-indigo-600"> trustworthy decision-making</strong>. Recent work includes Bayesian reliability
@@ -146,7 +157,7 @@
                     </section>
 
                     {/* CASE STUDIES / EXPERIENCE */}
-                    <section className="px-6 py-12 max-w-6xl mx-auto">
+                    <section className="px-6 py-12 max-w-6xl mx-auto overlay-bg rounded-xl shadow-lg mt-8">
                         <h2 className="text-3xl font-bold text-purple-700 mb-10 text-center border-b-2 border-purple-200 pb-2">Key Research & Case Studies</h2>
                         <div className="grid md:grid-cols-3 gap-8">
                             
@@ -202,7 +213,7 @@
                     </section>
 
                     {/* PROFESSIONAL EXPERIENCE */}
-                    <section id="experience" className="px-6 py-20 bg-white shadow-inner">
+                    <section id="experience" className="px-6 py-20 bg-white/80 shadow-inner rounded-xl mt-8 mx-auto max-w-6xl"> {/* Added overlay and rounded corners */}
                         <h2 className="text-3xl font-bold text-purple-700 mb-10 text-center border-b-2 border-purple-200 pb-2">Professional Experience</h2>
                         <div className="space-y-10 max-w-4xl mx-auto">
                             <div className="border-l-4 border-purple-500 pl-6 relative">
@@ -248,7 +259,7 @@
                     </section>
 
                     {/* PROJECTS */}
-                    <section id="projects" className="px-6 py-20 max-w-6xl mx-auto">
+                    <section id="projects" className="px-6 py-20 max-w-6xl mx-auto overlay-bg rounded-xl shadow-lg mt-8">
                         <h2 className="text-3xl font-bold text-purple-700 mb-10 text-center border-b-2 border-purple-200 pb-2">Projects</h2>
                         <div className="grid md:grid-cols-3 gap-8">
                             <div className="p-6 bg-white rounded-xl shadow-xl hover:shadow-2xl transition duration-300">
@@ -275,7 +286,7 @@
                     </section>
 
                     {/* PUBLICATIONS */}
-                    <section id="publications" className="px-6 py-20 bg-white shadow-inner">
+                    <section id="publications" className="px-6 py-20 bg-white/80 shadow-inner rounded-xl mt-8 mx-auto max-w-6xl"> {/* Added overlay and rounded corners */}
                         <h2 className="text-3xl font-bold text-purple-700 mb-8 text-center border-b-2 border-purple-200 pb-2">Publications</h2>
                         <ul className="list-none pl-0 max-w-4xl mx-auto space-y-4 text-gray-700">
                             <li className="p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition duration-200 border-l-4 border-purple-400">
@@ -292,7 +303,7 @@
                     </section>
 
                     {/* FOOTER */}
-                    <footer className="text-center py-10 text-sm text-gray-600 bg-gray-100 mt-10">
+                    <footer className="text-center py-10 text-sm text-gray-600 bg-gray-100/80 mt-10 rounded-t-xl mx-auto max-w-7xl"> {/* Added overlay and rounded corners */}
                         <p>Designed and maintained by Abhilesh Karn</p>
                         <p className="mt-1">© {new Date().getFullYear()} — All Rights Reserved</p>
                     </footer>
